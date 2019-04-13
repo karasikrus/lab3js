@@ -2,6 +2,7 @@
 
 
 let canvas = window.document.createElement("canvas");
+
 const CANVAS_WIDTH = 300;
 const CANVAS_HEIGHT = 300;
 canvas.width = CANVAS_WIDTH;
@@ -28,7 +29,7 @@ if (xhr.status != 200) {
 
     jsons = JSON.parse(xhr.response);
 }
-xhr.open('GET','https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en', false);
+xhr.open('GET','https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=ru', false);
 xhr.send();
 let quoteJson;
 if (xhr.status != 200) {
@@ -40,9 +41,13 @@ if (xhr.status != 200) {
 }
 let picture = jsons[0];
 let img1 = new Image();
+img1.crossOrigin = 'anonymous';
 let img2 = new Image();
+img2.crossOrigin = 'anonymous';
 let img3 = new Image();
+img3.crossOrigin = 'anonymous';
 let img4 = new Image();
+img4.crossOrigin = 'anonymous';
 
 let quote = quoteJson.quoteText;
 
@@ -63,6 +68,7 @@ const LoadingChecker = fn =>{
     counter++;
     if(counter == 4){
         write();
+        addDownloadLink();
     }
 
 }
@@ -93,5 +99,11 @@ function write() {
         lineHeight: "100%",
     });
 }
+function addDownloadLink() {
+let link = window.document.createElement('a');
+link.innerHTML = 'download image';
+link.href = canvas.toDataURL();
+link.download = "myPainting.png";
+window.document.body.appendChild(link);
+}
 
-//git remote add origin https://github.com/karasikrus/lab3js.git
