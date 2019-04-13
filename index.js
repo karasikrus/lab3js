@@ -16,7 +16,7 @@ ctx.fillRect (10, 10, 55, 50);
 ctx.fillStyle = "rgba(0, 100, 100, 0.5)";
 ctx.fillRect (30, 30, 55, 50);
 let xhr = new XMLHttpRequest();
-let params = 'collections=' + '175083' +
+let params = 'collections=' + '762960' +
     '&count=' + '4';
 xhr.open('GET', 'https://api.unsplash.com/photos/random?'+params,false);
 xhr.setRequestHeader('Authorization','Client-ID d30689fcb38588102786360524b57f0b5d532507302f21580ec6c043447a63a1');
