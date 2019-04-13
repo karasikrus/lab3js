@@ -2,7 +2,7 @@
 
 
 let canvas = window.document.createElement("canvas");
-
+const TEXT_HEIGHT = 20;
 const CANVAS_WIDTH = 300;
 const CANVAS_HEIGHT = 300;
 canvas.width = CANVAS_WIDTH;
@@ -64,10 +64,11 @@ const drawPicture = (img,x,y) => {
 
 }
 let counter = 0;
-const LoadingChecker = fn =>{
+function LoadingChecker(){
     counter++;
     if(counter == 4){
-        write();
+        simpleWrite();
+       // write();
         addDownloadLink();
     }
 
@@ -85,14 +86,23 @@ picture = jsons[3];
 img4.src = picture.urls.thumb;
 
 
-ctx.font = "50px Comic Sans MS";
+ctx.font = TEXT_HEIGHT + "px Comic Sans MS";
 ctx.fillStyle = "#00e0a5";
 ctx.textAlign = "center";
 ctx.textBaseline = "middle"
 window.document.body.appendChild(canvas);
 //let string = 'Очень крутая и длинная цитата. Очень много глубоких мыслей, прям супер глубоко';
+function simpleWrite(){
+    let lines = getLines(ctx,quote,CANVAS_WIDTH*2/3);
+    let recommendedTextHeight = CANVAS_HEIGHT*2/3/lines.length;
+    let middleLineNumber = lines.length/2;
+    for(let i = 0; i < lines.length; i++){
+        ctx.fillText(lines[i], CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - recommendedTextHeight * middleLineNumber + recommendedTextHeight * (i + 1), CANVAS_WIDTH * 2 / 3);
+    }
+
+}
 function write() {
-    CanvasTextWrapper(canvas,quote,{
+    CanvasTextWrapper(canvas,string,{
         font: "italic 800 25px Arial, sans-serif",
         textAlign: "center",
         verticalAlign: "middle",
@@ -105,5 +115,23 @@ link.innerHTML = 'download image';
 link.href = canvas.toDataURL();
 link.download = "myPainting.png";
 window.document.body.appendChild(link);
+}
+function getLines(ctx, text, maxWidth) {
+    let words = text.split(" ");
+    let lines = [];
+    let currentLine = words[0];
+
+    for (let i = 1; i < words.length; i++) {
+        let word = words[i];
+        let width = ctx.measureText(currentLine + " " + word).width;
+        if (width < maxWidth) {
+            currentLine += " " + word;
+        } else {
+            lines.push(currentLine);
+            currentLine = word;
+        }
+    }
+    lines.push(currentLine);
+    return lines;
 }
 
