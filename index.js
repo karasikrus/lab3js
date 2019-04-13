@@ -2,9 +2,10 @@
 
 
 let canvas = window.document.createElement("canvas");
-const TEXT_HEIGHT = 20;
+const TEXT_HEIGHT = 18;
 const CANVAS_WIDTH = 300;
 const CANVAS_HEIGHT = 300;
+let workingFlag = false;
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
 let ctx = canvas.getContext("2d");
@@ -24,8 +25,13 @@ xhr.send();
 let jsons;
 if (xhr.status != 200) {
 
-    alert( xhr.status + ': ' + xhr.statusText );
+   // xhr.open('GET', 'https://source.unsplash.com/collection/1127163/300x200', false);
+   // xhr.responseType = 'blob';
+    //xhr.send();
+
+   // jsons = JSON.parse(xhr.response);
 } else {
+    workingFlag = true;
 
     jsons = JSON.parse(xhr.response);
 }
@@ -39,7 +45,8 @@ if (xhr.status != 200) {
 
     quoteJson = JSON.parse(xhr.response);
 }
-let picture = jsons[0];
+//
+
 let img1 = new Image();
 img1.crossOrigin = 'anonymous';
 let img2 = new Image();
@@ -77,13 +84,25 @@ img1.onload = function (){drawPicture(img1,0,0); LoadingChecker();}
 img2.onload = function (){drawPicture(img2,CANVAS_WIDTH/2,0);LoadingChecker();}
 img3.onload = function (){drawPicture(img3,0,CANVAS_HEIGHT/2);LoadingChecker();}
 img4.onload = function (){drawPicture(img4,CANVAS_WIDTH/2,CANVAS_HEIGHT/2);LoadingChecker();}
-img1.src = picture.urls.thumb;
+if(workingFlag){
+    let picture = jsons[0];
+    img1.src = picture.urls.thumb;
 picture = jsons[1];
-img2.src = picture.urls.thumb;
+    img2.src = picture.urls.thumb;
 picture = jsons[2];
-img3.src = picture.urls.thumb;
+    img3.src = picture.urls.thumb;
 picture = jsons[3];
-img4.src = picture.urls.thumb;
+    img4.src = picture.urls.thumb;
+
+} else{
+
+    img1.src = 'https://source.unsplash.com/collection/1127163/300x200';
+    img2.src = 'https://source.unsplash.com/collection/1127164/300x200';
+    img3.src = 'https://source.unsplash.com/collection/1127165/300x200';
+    img4.src = 'https://source.unsplash.com/collection/1127166/300x200';
+}
+
+
 
 
 ctx.font = TEXT_HEIGHT + "px Comic Sans MS";
@@ -93,11 +112,12 @@ ctx.textBaseline = "middle"
 window.document.body.appendChild(canvas);
 //let string = 'Очень крутая и длинная цитата. Очень много глубоких мыслей, прям супер глубоко';
 function simpleWrite(){
+    ctx.font = TEXT_HEIGHT + "px Comic Sans MS";
     let lines = getLines(ctx,quote,CANVAS_WIDTH*2/3);
-    let recommendedTextHeight = CANVAS_HEIGHT*2/3/lines.length;
+    //let recommendedTextHeight = CANVAS_HEIGHT*2/3/lines.length;
     let middleLineNumber = lines.length/2;
     for(let i = 0; i < lines.length; i++){
-        ctx.fillText(lines[i], CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - recommendedTextHeight * middleLineNumber + recommendedTextHeight * (i + 1), CANVAS_WIDTH * 2 / 3);
+        ctx.fillText(lines[i], CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - TEXT_HEIGHT * middleLineNumber + TEXT_HEIGHT * (i + 1), CANVAS_WIDTH * 2 / 3);
     }
 
 }
